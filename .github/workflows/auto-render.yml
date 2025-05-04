@@ -1,0 +1,41 @@
+name: Auto-render ORC losses
+
+# → every day at 01:00 UTC, plus manual trigger
+on:
+  schedule:
+    - cron:  '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) checkout full repo (so .git is available)
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # 2) (Optional) set up Docker buildx if you need more advanced builds
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 3) build your Docker image
+      - name: Build automiser image
+        run: |
+          docker build \
+            -f automiser.dockerfile \
+            -t automiser:latest .
+
+      # 4) run the container (it will scrape, render, commit, and push)
+      - name: Run automiser
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/app \
+            -e GITHUB_TOKEN \
+            -e GITHUB_REPOSITORY \
+            automiser:latest
