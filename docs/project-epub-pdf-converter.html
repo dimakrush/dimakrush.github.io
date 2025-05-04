@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EPUB to PDF Converter | Dmytro Krushynskyi</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    a { text-decoration: none; color: #0077cc; }
+    a:hover { text-decoration: underline; }
+    header { background-color: #1e3a8a; color: white; padding: 2rem 0; text-align: center; }
+    .header-content h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .header-content p { font-size: 1.1rem; opacity: 0.9; }
+    nav { background-color: #2563eb; padding: 1rem; position: sticky; top: 0; z-index: 100; }
+    nav ul { display: flex; justify-content: center; list-style: none; max-width: 1200px; margin: 0 auto; }
+    nav li { margin: 0 1rem; }
+    nav a { color: white; font-weight: 500; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+    section { margin-bottom: 3rem; }
+    h2 { color: #1e3a8a; font-size: 1.8rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #2563eb; }
+    h3 { margin: 1.5rem 0 0.75rem; color: #1e40af; }
+    p, ul, ol { margin-bottom: 1rem; }
+    ul, ol { padding-left: 1.5rem; }
+    li { margin-bottom: 0.5rem; }
+    .project-header { display: flex; align-items: flex-start; margin-bottom: 2rem; }
+    .project-image { width: 400px; height: 250px; background-color: #ddd; border-radius: 8px; margin-right: 2rem; display: flex; justify-content: center; align-items: center; font-size: 2rem; color: #666; }
+    .project-details { flex: 1; }
+    .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
+    .tech-badge { background-color: #e5e7eb; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.9rem; color: #1e40af; font-weight: 500; }
+    .code-block { background-color: #1e293b; color: #e2e8f0; padding: 1.5rem; border-radius: 8px; overflow-x: auto; margin: 1.5rem 0; font-family: 'Consolas', 'Monaco', monospace; position: relative; line-height: 1.5; }
+    .code-language { position: absolute; top: 0; right: 0; background-color: #0f172a; padding: 0.25rem 0.75rem; font-size: 0.8rem; border-bottom-left-radius: 8px; }
+    .screenshot-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+    .screenshot { background-color: #ddd; height: 200px; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; color: #666; }
+    .cta-button { display: inline-block; background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border-radius: 4px; font-weight: 500; margin-top: 1.5rem; transition: background-color 0.2s ease; }
+    .cta-button:hover { background-color: #1e40af; }
+    .back-link { display: inline-flex; align-items: center; margin-bottom: 1.5rem; font-weight: 500; }
+    .back-link::before { content: "←"; margin-right: 0.5rem; }
+    .workflow-container { background-color: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 2rem 0; }
+    .workflow-step { display: flex; margin-bottom: 1.5rem; align-items: flex-start; }
+    .workflow-step:last-child { margin-bottom: 0; }
+    .step-number { background-color: #2563eb; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 1rem; flex-shrink: 0; }
+    .step-content { flex: 1; }
+    .step-content h4 { margin-bottom: 0.5rem; color: #1e40af; }
+    footer { background-color: #1e3a8a; color: white; text-align: center; padding: 2rem 0; }
+    .social-links a { color: white; margin: 0 0.5rem; font-size: 1.5rem; }
+    @media (max-width: 768px) {
+      nav ul { flex-direction: column; text-align: center; }
+      nav li { margin: 0.5rem 0; }
+      .project-header { flex-direction: column; }
+      .project-image { width: 100%; margin-right: 0; margin-bottom: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <h1>EPUB to PDF Converter</h1>
+      <p>A Python Tool for E-book Format Conversion</p>
+    </div>
+  </header>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#experience">Experience</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <main class="container">
+    <a href="index.html#projects" class="back-link">Back to Projects</a>
+    <div class="project-header">
+      <div class="project-image">EPUB → PDF</div>
+      <div class="project-details">
+        <h2>EPUB to PDF Converter</h2>
+        <p>A Python script that converts EPUB e-books to PDF format with high fidelity, batch processing, Unicode font support, and progress tracking.</p>
+        <div class="tech-stack">
+          <span class="tech-badge">Python</span>
+          <span class="tech-badge">EbookLib</span>
+          <span class="tech-badge">FPDF</span>
+          <span class="tech-badge">Beautiful Soup</span>
+          <span class="tech-badge">lxml</span>
+          <span class="tech-badge">concurrent.futures</span>
+          <span class="tech-badge">tqdm</span>
+        </div>
+        <a href="https://github.com/dmytrokrushynskyi/epub-to-pdf" class="cta-button">View on GitHub</a>
+      </div>
+    </div>
+    <section>
+      <h3>How It Works</h3>
+      <div class="workflow-container">
+        <div class="workflow-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>EPUB Parsing</h4>
+            <p>Read the EPUB structure and extract document items from the spine.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>HTML Processing</h4>
+            <p>Use BeautifulSoup to parse headings and paragraphs from each chapter.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Font Loading</h4>
+            <p>Load Unicode-capable fonts or fallback to default for multilingual support.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>PDF Generation</h4>
+            <p>Render content with FPDF, handling styles, headings, and paragraphs.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h4>Parallel Batch Conversion</h4>
+            <p>Convert multiple EPUBs concurrently using ProcessPoolExecutor.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="step-number">6</div>
+          <div class="step-content">
+            <h4>Progress Tracking</h4>
+            <p>Display conversion progress with a tqdm progress bar.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h3>Core Script</h3>
+      <div class="code-block">
+        <div class="code-language">Python</div>
+        <pre>
+import os
+import tempfile
+from fpdf import FPDF
+import ebooklib
+from ebooklib import epub
+from bs4 import BeautifulSoup
+from concurrent.futures import ProcessPoolExecutor
+from tqdm import tqdm
+
+class PDF(FPDF):
+    def header(self):
+        self.set_font('Arial', 'B', 12)
+        self.cell(0, 10, '', 0, 1, 'C')
+        
+    def footer(self):
+        self.set_y(-15)
+        self.set_font('Arial', 'I', 8)
+        self.cell(0, 10, f'Page {self.page_no()}', 0, 0, 'C')
+
+# ... full script ...
+
+def epub_to_pdf(epub_file, pdf_file):
+    # read EPUB, load fonts, parse HTML and render PDF
+    pass
+
+# Batch conversion with parallel processing and progress bar
+if __name__ == '__main__':
+    convert_all_epubs_in_folder('/path/to/epubs')
+        </pre>
+      </div>
+    </section>
+    <a href="index.html#projects" class="back-link">Back to Projects</a>
+  </main>
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Dmytro Krushynskyi. All rights reserved.</p>
+      <div class="social-links">
+        <a href="https://linkedin.com/in/dmytro-krushynskiy-8060941a4/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</body>
+</html>

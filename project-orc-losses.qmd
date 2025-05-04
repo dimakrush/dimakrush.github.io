@@ -1,0 +1,377 @@
+---
+title: "Military Equipment Losses Analysis"
+format: html
+editor: visual
+---
+
+```{r setup, include=FALSE}
+# Load required libraries
+library(readr)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(plotly)
+library(DT)
+library(knitr)
+```
+
+## Overview
+
+This document analyzes military equipment losses data over time. The dataset contains cumulative counts and daily increments of various military equipment categories.
+
+## Data Import and Preprocessing
+
+```{r data-import}
+# Read the CSV file
+data <- read_csv(
+  "russian_casualties.csv",
+  col_types = cols(
+    date                         = col_date(format = "%Y-%m-%d"),
+    tanks                        = col_double(),
+    tanks_increment              = col_double(),
+    armored_fighting_vehicles    = col_double(),
+    afv_increment                = col_double(),
+    artillery_systems            = col_double(),
+    artillery_increment          = col_double(),
+    mlrs                         = col_double(),
+    mlrs_increment               = col_double(),
+    air_defense_systems          = col_double(),
+    air_defense_increment        = col_double(),
+    aircraft                     = col_double(),
+    aircraft_increment           = col_double(),
+    helicopters                  = col_double(),
+    helicopters_increment        = col_double(),
+    uav                          = col_double(),
+    uav_increment                = col_double(),
+    cruise_missiles              = col_double(),
+    cruise_missiles_increment    = col_double(),
+    ships                        = col_double(),
+    ships_increment              = col_double(),
+    submarines                   = col_double(),
+    submarines_increment         = col_double(),
+    vehicles_fuel_tanks          = col_double(),
+    vehicles_increment           = col_double(),
+    special_equipment            = col_double(),
+    special_equipment_increment  = col_double(),
+    personnel                    = col_double(),
+    personnel_increment          = col_double()
+  )
+)
+
+# Display the first few rows of the dataset
+DT::datatable(head(data, 10), 
+              options = list(scrollX = TRUE, pageLength = 5),
+              caption = "First 10 rows of the dataset")
+
+# Create a summary of the most recent data point
+latest_data <- data %>% 
+  arrange(desc(date)) %>% 
+  slice(1) %>%
+  select(-contains("increment")) %>%
+  pivot_longer(cols = -date, names_to = "Equipment Type", values_to = "Total Losses")
+
+kable(latest_data, caption = "Latest Equipment Loss Totals")
+```
+
+## Time Series Analysis of Cumulative Losses
+
+### Major Equipment Categories Over Time
+
+```{r time-series-major}
+# Select major equipment categories for time series plot
+major_equipment <- data %>%
+  select(date, tanks, armored_fighting_vehicles, artillery_systems, aircraft, helicopters)
+
+# Convert to long format for plotting
+major_long <- major_equipment %>%
+  pivot_longer(cols = -date, names_to = "equipment", values_to = "count") %>%
+  mutate(equipment = gsub("_", " ", equipment))
+
+# Create interactive time series plot
+fig1 <- plot_ly(major_long, x = ~date, y = ~count, color = ~equipment, type = 'scatter', mode = 'lines') %>%
+  layout(title = "Cumulative Losses of Major Equipment Categories Over Time",
+         xaxis = list(title = "Date"),
+         yaxis = list(title = "Cumulative Count"),
+         hovermode = "compare")
+fig1
+```
+
+### Air-based Equipment Over Time
+
+```{r time-series-air}
+# Select air-based equipment for time series plot
+air_equipment <- data %>%
+  select(date, aircraft, helicopters, uav, cruise_missiles)
+
+# Convert to long format for plotting
+air_long <- air_equipment %>%
+  pivot_longer(cols = -date, names_to = "equipment", values_to = "count") %>%
+  mutate(equipment = gsub("_", " ", equipment))
+
+# Create interactive time series plot
+fig2 <- plot_ly(air_long, x = ~date, y = ~count, color = ~equipment, type = 'scatter', mode = 'lines') %>%
+  layout(title = "Cumulative Losses of Air-based Equipment Over Time",
+         xaxis = list(title = "Date"),
+         yaxis = list(title = "Cumulative Count"),
+         hovermode = "compare")
+fig2
+```
+
+### Ground-based Equipment Over Time
+
+```{r time-series-ground}
+# Select ground-based equipment for time series plot
+ground_equipment <- data %>%
+  select(date, tanks, armored_fighting_vehicles, artillery_systems, mlrs, vehicles_fuel_tanks)
+
+# Convert to long format for plotting
+ground_long <- ground_equipment %>%
+  pivot_longer(cols = -date, names_to = "equipment", values_to = "count") %>%
+  mutate(equipment = gsub("_", " ", equipment))
+
+# Create interactive time series plot
+fig3 <- plot_ly(ground_long, x = ~date, y = ~count, color = ~equipment, type = 'scatter', mode = 'lines') %>%
+  layout(title = "Cumulative Losses of Ground-based Equipment Over Time",
+         xaxis = list(title = "Date"),
+         yaxis = list(title = "Cumulative Count"),
+         hovermode = "compare")
+fig3
+```
+
+## Daily Increment Analysis
+
+### Daily Losses Heatmap
+
+```{r daily-heatmap}
+# Create a heatmap of daily losses for selected equipment types
+increment_data <- data %>%
+  select(date, tanks_increment, afv_increment, artillery_increment, 
+         aircraft_increment, helicopters_increment, uav_increment) %>%
+  rename(
+    Tanks = tanks_increment,
+    AFVs = afv_increment,
+    Artillery = artillery_increment,
+    Aircraft = aircraft_increment,
+    Helicopters = helicopters_increment,
+    UAVs = uav_increment
+  )
+
+# Create a date field for month grouping
+increment_data$month <- floor_date(increment_data$date, "month")
+
+# Aggregate by month for better visualization
+monthly_increments <- increment_data %>%
+  group_by(month) %>%
+  summarize(
+    Tanks = sum(Tanks, na.rm = TRUE),
+    AFVs = sum(AFVs, na.rm = TRUE),
+    Artillery = sum(Artillery, na.rm = TRUE),
+    Aircraft = sum(Aircraft, na.rm = TRUE),
+    Helicopters = sum(Helicopters, na.rm = TRUE),
+    UAVs = sum(UAVs, na.rm = TRUE)
+  )
+
+# Create a heatmap of monthly losses
+monthly_long <- monthly_increments %>%
+  pivot_longer(cols = -month, names_to = "equipment", values_to = "count")
+
+fig4 <- plot_ly(monthly_long, x = ~month, y = ~equipment, z = ~count, type = "heatmap",
+                colorscale = "Viridis") %>%
+  layout(title = "Monthly Equipment Losses Heatmap",
+         xaxis = list(title = "Month"),
+         yaxis = list(title = "Equipment Type"))
+fig4
+```
+
+### Personnel Losses Over Time
+
+```{r personnel-losses}
+# Create a dual-axis chart for personnel losses
+fig5 <- plot_ly() %>%
+  add_trace(data = data, x = ~date, y = ~personnel, 
+            type = 'scatter', mode = 'lines', name = 'Cumulative Personnel Losses',
+            line = list(color = 'blue')) %>%
+  add_trace(data = data, x = ~date, y = ~personnel_increment, 
+            type = 'bar', name = 'Daily Personnel Losses',
+            marker = list(color = 'rgba(255, 0, 0, 0.5)')) %>%
+  layout(title = "Personnel Losses Over Time",
+         xaxis = list(title = "Date"),
+         yaxis = list(title = "Count", side = "left"),
+         legend = list(x = 0.1, y = 0.9))
+fig5
+```
+
+## Comparative Analysis
+
+### Equipment Loss Composition
+
+```{r equipment-composition}
+# Create a pie chart of latest equipment losses
+latest_point <- nrow(data)
+latest_equipment_data <- data[latest_point, ] %>%
+  select(tanks, armored_fighting_vehicles, artillery_systems, mlrs, 
+         air_defense_systems, aircraft, helicopters, uav)
+
+# Convert to long format for plotting
+latest_equipment_long <- data.frame(
+  equipment = names(latest_equipment_data),
+  count = unlist(latest_equipment_data)
+) %>%
+  mutate(equipment = gsub("_", " ", equipment))
+
+fig6 <- plot_ly(latest_equipment_long, labels = ~equipment, values = ~count, type = 'pie',
+                textinfo = 'label+percent',
+                marker = list(line = list(color = '#FFFFFF', width = 1))) %>%
+  layout(title = "Composition of Total Equipment Losses")
+fig6
+```
+
+### Monthly Loss Rate Comparison
+
+```{r monthly-loss-rate}
+# Calculate monthly loss rates for major equipment types
+monthly_data <- data %>%
+  mutate(month = floor_date(date, "month")) %>%
+  group_by(month) %>%
+  summarize(
+    Tanks = sum(tanks_increment, na.rm = TRUE),
+    AFVs = sum(afv_increment, na.rm = TRUE),
+    Artillery = sum(artillery_increment, na.rm = TRUE),
+    Aircraft = sum(aircraft_increment, na.rm = TRUE),
+    UAVs = sum(uav_increment, na.rm = TRUE)
+  )
+
+# Convert to long format
+monthly_long_data <- monthly_data %>%
+  pivot_longer(cols = -month, names_to = "equipment", values_to = "losses")
+
+# Create a grouped bar chart
+fig7 <- plot_ly(monthly_long_data, x = ~month, y = ~losses, color = ~equipment, type = 'bar') %>%
+  layout(title = "Monthly Equipment Loss Rates",
+         xaxis = list(title = "Month"),
+         yaxis = list(title = "Count"),
+         barmode = 'group')
+fig7
+```
+
+## Intensity Analysis
+
+### Loss Intensity Map
+
+```{r loss-intensity}
+# Create a calendar heatmap of total equipment losses per day
+daily_total_losses <- data %>%
+  rowwise() %>%
+  mutate(total_increments = sum(c(tanks_increment, afv_increment, artillery_increment, 
+                                 mlrs_increment, air_defense_increment, aircraft_increment,
+                                 helicopters_increment, uav_increment, cruise_missiles_increment,
+                                 ships_increment, submarines_increment, vehicles_increment,
+                                 special_equipment_increment), na.rm = TRUE)) %>%
+  select(date, total_increments)
+
+# Extract year, month, and day for calendar heatmap
+daily_total_losses <- daily_total_losses %>%
+  mutate(
+    year = year(date),
+    month = month(date),
+    day = day(date)
+  )
+
+# Create a calendar heatmap
+fig8 <- plot_ly(daily_total_losses, x = ~day, y = ~month, z = ~total_increments, type = "heatmap",
+                colorscale = "Reds") %>%
+  layout(title = "Daily Equipment Loss Intensity",
+         xaxis = list(title = "Day of Month", dtick = 1),
+         yaxis = list(title = "Month", dtick = 1, 
+                     tickvals = 1:12,
+                     ticktext = month.abb))
+fig8
+```
+
+## Correlation Analysis
+
+```{r correlation-analysis}
+# Calculate correlation between different types of equipment losses
+increment_correlation <- data %>%
+  select(contains("increment")) %>%
+  cor(use = "pairwise.complete.obs")
+
+# Convert correlation matrix to long format for heatmap
+corr_long <- as.data.frame(as.table(increment_correlation))
+names(corr_long) <- c("var1", "var2", "correlation")
+
+# Create correlation heatmap
+fig9 <- plot_ly(corr_long, x = ~var1, y = ~var2, z = ~correlation, type = "heatmap",
+                colorscale = list(c(0, "blue"), c(0.5, "white"), c(1, "red")),
+                zmin = -1, zmax = 1) %>%
+  layout(title = "Correlation Between Daily Equipment Losses",
+         xaxis = list(title = ""),
+         yaxis = list(title = ""))
+fig9
+```
+
+## Trend Analysis
+
+### Moving Averages of Major Equipment Losses
+
+```{r moving-averages}
+# Calculate 7-day moving averages for major equipment types
+ma_data <- data %>%
+  arrange(date) %>%
+  mutate(
+    tanks_ma7 = zoo::rollmean(tanks_increment, k = 7, fill = NA, align = "right"),
+    afv_ma7 = zoo::rollmean(afv_increment, k = 7, fill = NA, align = "right"),
+    artillery_ma7 = zoo::rollmean(artillery_increment, k = 7, fill = NA, align = "right"),
+    uav_ma7 = zoo::rollmean(uav_increment, k = 7, fill = NA, align = "right")
+  )
+
+# Convert to long format for plotting
+ma_long <- ma_data %>%
+  select(date, tanks_ma7, afv_ma7, artillery_ma7, uav_ma7) %>%
+  pivot_longer(cols = -date, names_to = "equipment", values_to = "ma7") %>%
+  mutate(equipment = gsub("_ma7", "", equipment))
+
+# Create interactive line chart with moving averages
+fig10 <- plot_ly(ma_long, x = ~date, y = ~ma7, color = ~equipment, type = 'scatter', mode = 'lines') %>%
+  layout(title = "7-Day Moving Average of Daily Equipment Losses",
+         xaxis = list(title = "Date"),
+         yaxis = list(title = "7-Day Moving Average"),
+         hovermode = "compare")
+fig10
+```
+
+## Periodicity Analysis
+
+### Weekday Loss Patterns
+
+```{r weekday-patterns}
+# Analyze loss patterns by day of week
+weekday_data <- data %>%
+  mutate(weekday = weekdays(date)) %>%
+  mutate(weekday = factor(weekday, levels = c("Monday", "Tuesday", 
+                                            "Wednesday", "Thursday", 
+                                            "Friday", "Saturday", "Sunday"))) %>%
+  group_by(weekday) %>%
+  summarize(
+    tanks = mean(tanks_increment, na.rm = TRUE),
+    afv = mean(afv_increment, na.rm = TRUE),
+    artillery = mean(artillery_increment, na.rm = TRUE),
+    personnel = mean(personnel_increment, na.rm = TRUE)
+  )
+
+# Convert to long format
+weekday_long <- weekday_data %>%
+  pivot_longer(cols = -weekday, names_to = "equipment", values_to = "avg_losses")
+
+# Create a grouped bar chart by weekday
+fig11 <- plot_ly(weekday_long, x = ~weekday, y = ~avg_losses, color = ~equipment, type = 'bar') %>%
+  layout(title = "Average Daily Losses by Day of Week",
+         xaxis = list(title = "Day of Week"),
+         yaxis = list(title = "Average Daily Losses"),
+         barmode = 'group')
+fig11
+```
+
+## Conclusion
+
+This analysis provides various visualizations of military equipment losses data. The interactive plots help identify trends, patterns, and relationships in the data over time. \`\`\`

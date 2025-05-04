@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkedIn Lead Tracking Extension | Dmytro Krushynskyi</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    
+    a {
+      text-decoration: none;
+      color: #0077cc;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Header */
+    header {
+      background-color: #1e3a8a;
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+    }
+    
+    .header-content h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .header-content p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    
+    nav {
+      background-color: #2563eb;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    nav li {
+      margin: 0 1rem;
+    }
+    
+    nav a {
+      color: white;
+      font-weight: 500;
+    }
+    
+    /* Main content */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    section {
+      margin-bottom: 3rem;
+    }
+    
+    h2 {
+      color: #1e3a8a;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #2563eb;
+    }
+    
+    h3 {
+      margin: 1.5rem 0 0.75rem;
+      color: #1e40af;
+    }
+    
+    p {
+      margin-bottom: 1rem;
+    }
+    
+    ul, ol {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    
+    li {
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Project specific styles */
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+    }
+    
+    .project-image {
+      width: 400px;
+      height: 250px;
+      background-color: #ddd;
+      border-radius: 8px;
+      margin-right: 2rem;
+    }
+    
+    .project-details {
+      flex: 1;
+    }
+    
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    
+    .tech-badge {
+      background-color: #e5e7eb;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: #1e40af;
+      font-weight: 500;
+    }
+    
+    .screenshot-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .screenshot {
+      background-color: #ddd;
+      height: 200px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background-color: #2563eb;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      transition: background-color 0.2s ease;
+    }
+    
+    .cta-button:hover {
+      background-color: #1e40af;
+      text-decoration: none;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+    
+    .back-link::before {
+      content: "←";
+      margin-right: 0.5rem;
+    }
+    
+    /* Footer */
+    footer {
+      background-color: #1e3a8a;
+      color: white;
+      text-align: center;
+      padding: 2rem 0;
+    }
+    
+    .social-links {
+      margin: 1rem 0;
+    }
+    
+    .social-links a {
+      color: white;
+      margin: 0 0.5rem;
+      font-size: 1.5rem;
+    }
+    
+    /* Media queries */
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      nav li {
+        margin: 0.5rem 0;
+      }
+      
+      .project-header {
+        flex-direction: column;
+      }
+      
+      .project-image {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container header-content">
+      <h1>LinkedIn Lead Tracking Extension</h1>
+      <p>Chrome Extension for Sales Development</p>
+    </div>
+  </header>
+  
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#experience">Experience</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+  
+  <!-- Main Content -->
+  <main class="container">
+    <a href="index.html#projects" class="back-link">Back to Projects</a>
+    
+    <div class="project-header">
+      <div class="project-image"></div>
+      <div class="project-details">
+        <h2>Chrome Extension for LinkedIn Lead Tracking</h2>
+        <p>A custom tool I developed to streamline the lead generation process for sales development representatives, allowing for efficient data collection and management directly from LinkedIn profiles.</p>
+        
+        <div class="tech-stack">
+          <span class="tech-badge">JavaScript</span>
+          <span class="tech-badge">HTML/CSS</span>
+          <span class="tech-badge">Chrome API</span>
+          <span class="tech-badge">LinkedIn API</span>
+        </div>
+        
+        <a href="#" class="cta-button">View on Chrome Web Store</a>
+      </div>
+    </div>
+    
+    <section>
+      <h3>Project Overview</h3>
+      <p>As a Sales Development Representative, I identified a significant bottleneck in the lead generation process: manually collecting and transferring prospect information from LinkedIn to our CRM system. To solve this problem, I developed a Chrome extension that:</p>
+      
+      <ul>
+        <li>Automatically extracts key information from LinkedIn profiles</li>
+        <li>Stores lead data in cloud for easy access</li>
+        <li>Includes note-taking capabilities for each prospect</li>
+      </ul>
+      
+      <p>The extension has significantly improved my prospecting efficiency, reducing the time spent on data entry by approximately 40%.</p>
+    </section>
+    
+    <section>
+      <h3>Key Features</h3>
+      <ul>
+        <li><strong>One-Click Data Extraction:</strong> Extract contact information, current role, company details, and education with a single click</li>
+        <li><strong>Custom Tags and Categories:</strong> Organize leads with custom tags for better follow-up management</li>
+        <li><strong>Export Functionality:</strong> Export data in CSV format for easy import to HubSpot, Salesforce, or other CRM systems</li>
+        <li><strong>Activity Tracking:</strong> Log communication history and follow-up reminders</li>
+        <li><strong>Privacy Focused:</strong> All data is stored locally on your device, ensuring prospect information remains secure</li>
+      </ul>
+    </section>
+    
+    <section>
+      <h3>Development Process</h3>
+      <p>I developed this extension over a 6-week period while working full-time as an SDR. The process included:</p>
+      
+      <ol>
+        <li><strong>Research & Planning:</strong> Investigating LinkedIn's DOM structure and identifying key information fields</li>
+        <li><strong>Extension Architecture:</strong> Designing the data flow and storage approach</li>
+        <li><strong>UI Design:</strong> Creating a clean, intuitive interface that doesn't interrupt the normal browsing experience</li>
+        <li><strong>Development:</strong> Building the core functionality using JavaScript and Chrome's extension APIs</li>
+        <li><strong>Testing:</strong> Extensive testing with actual prospects to ensure accuracy and reliability</li>
+        <li><strong>Iteration:</strong> Continuing to improve based on daily usage and feedback</li>
+      </ol>
+    </section>
+    
+    <section>
+      <h3>Screenshots</h3>
+      <div class="screenshot-gallery">
+        <div class="screenshot"></div>
+        <div class="screenshot"></div>
+        <div class="screenshot"></div>
+      </div>
+    </section>
+    
+    <section>
+      <h3>Results & Impact</h3>
+      <p>Since implementing this tool in my workflow:</p>
+      <ul>
+        <li>Reduced time spent on data entry by 40%</li>
+        <li>Increased daily prospecting capacity by 30%</li>
+        <li>Improved data accuracy by eliminating manual entry errors</li>
+        <li>Enhanced follow-up consistency with integrated reminders</li>
+      </ul>
+      <p>The extension has been shared with my sales team and has received positive feedback for its usability and efficiency benefits.</p>
+    </section>
+    
+    <section>
+      <h3>Future Development</h3>
+      <p>I'm actively working on the next version with these planned enhancements:</p>
+      <ul>
+        <li>Direct CRM integration via APIs</li>
+        <li>Enhanced company insights using additional data sources</li>
+        <li>Team collaboration features for shared prospecting</li>
+        <li>AI-assisted lead scoring based on profile data</li>
+      </ul>
+    </section>
+    
+    <a href="index.html#projects" class="back-link">Back to Projects</a>
+  </main>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Dmytro Krushynskyi. All rights reserved.</p>
+      <div class="social-links">
+        <a href="https://linkedin.com/in/dmytro-krushynskiy-8060941a4/" target="_blank" aria-label="LinkedIn">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="#" aria-label="GitHub">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Font Awesome for social icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</body>
+</html>
