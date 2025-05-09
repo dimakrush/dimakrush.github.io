@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aluminum Price Forecasting Project</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    
+    a {
+      text-decoration: none;
+      color: #0077cc;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Header */
+    header {
+      background-color: #1e3a8a;
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+    }
+    
+    .header-content h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .header-content p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    
+    nav {
+      background-color: #2563eb;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    nav li {
+      margin: 0 1rem;
+    }
+    
+    nav a {
+      color: white;
+      font-weight: 500;
+    }
+    
+    /* Main content */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    section {
+      margin-bottom: 3rem;
+    }
+    
+    h2 {
+      color: #1e3a8a;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #2563eb;
+    }
+    
+    h3 {
+      margin: 1.5rem 0 0.75rem;
+      color: #1e40af;
+    }
+    
+    p {
+      margin-bottom: 1rem;
+    }
+    
+    ul, ol {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    
+    li {
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Project specific styles */
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+    }
+    
+    .project-image {
+      width: 400px;
+      height: 250px;
+      background-color: #ddd;
+      border-radius: 8px;
+      margin-right: 2rem;
+      background-image: url('/api/placeholder/400/250');
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .project-details {
+      flex: 1;
+    }
+    
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    
+    .tech-badge {
+      background-color: #e5e7eb;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: #1e40af;
+      font-weight: 500;
+    }
+    
+    .screenshot-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .screenshot {
+      background-color: #ddd;
+      height: 200px;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: url('/api/placeholder/300/200');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    
+    .screenshot::after {
+      content: attr(data-title);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background-color: #2563eb;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 500;
+      margin-top: 1.5rem;
+      transition: background-color 0.2s ease;
+    }
+    
+    .cta-button:hover {
+      background-color: #1e40af;
+      text-decoration: none;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+    
+    .back-link::before {
+      content: "←";
+      margin-right: 0.5rem;
+    }
+    
+    .model-comparison {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1.5rem 0;
+    }
+    
+    .model-comparison th, 
+    .model-comparison td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    
+    .model-comparison th {
+      background-color: #f2f2f2;
+    }
+    
+    .model-comparison tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    /* Footer */
+    footer {
+      background-color: #1e3a8a;
+      color: white;
+      text-align: center;
+      padding: 2rem 0;
+    }
+    
+    .social-links {
+      margin: 1rem 0;
+    }
+    
+    .social-links a {
+      color: white;
+      margin: 0 0.5rem;
+      font-size: 1.5rem;
+    }
+    
+    /* Media queries */
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      nav li {
+        margin: 0.5rem 0;
+      }
+      
+      .project-header {
+        flex-direction: column;
+      }
+      
+      .project-image {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container header-content">
+      <h1>Aluminum Price Forecasting</h1>
+      <p>Time Series Analysis and Forecasting Project</p>
+    </div>
+  </header>
+  
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#methodology">Methodology</a></li>
+      <li><a href="#models">Models</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+    </ul>
+  </nav>
+  
+  <!-- Main Content -->
+  <main class="container">
+    <div class="project-header">
+      <div class="project-details">
+        <h2 id="overview">Time Series Forecasting for Aluminum Prices</h2>
+        <p>An advanced time series analysis project focused on forecasting aluminum prices using multiple models while exploring relationships with other metal prices, specifically copper and zinc.</p>
+        
+        <div class="tech-stack">
+          <span class="tech-badge">R</span>
+          <span class="tech-badge">Time Series Analysis</span>
+          <span class="tech-badge">ARIMA</span>
+          <span class="tech-badge">VAR</span>
+          <span class="tech-badge">ECM</span>
+          <span class="tech-badge">Forecasting</span>
+        </div>
+      </div>
+    </div>
+    
+    <section id="methodology">
+      <h2>Methodology</h2>
+      <p>This project employed rigorous time series analysis techniques to develop accurate forecasting models for aluminum prices. The analysis began with exploratory data visualization and stationarity testing, followed by the implementation of three different types of models.</p>
+      
+      <h3>Data Preparation</h3>
+      <p>The project utilized monthly price data for various metals, with the primary focus on aluminum. The dataset was split into a training set (up to 2010) and a test set (after 2010) to evaluate forecasting performance.</p>
+      
+      <h3>Stationarity Analysis</h3>
+      <p>Augmented Dickey-Fuller (ADF) tests were conducted on differenced price series to confirm stationarity, a prerequisite for time series modeling. All differenced series showed strong evidence of stationarity with test statistics far below critical values.</p>
+    </section>
+    
+    <section id="models">
+      <h2>Models Developed</h2>
+      <p>Three different models were developed and compared to forecast aluminum prices:</p>
+      
+      <h3>Error Correction Model (ECM)</h3>
+      <p>The ECM exploits the long-term equilibrium relationship between aluminum and copper prices. The model indicates that when aluminum prices deviate from their long-term relationship with copper, there is a tendency for them to return to equilibrium, albeit slowly.</p>
+      
+      <h3>Vector Autoregression (VAR)</h3>
+      <p>The VAR model captures the dynamic relationships between changes in aluminum and copper prices, with optimal lag selection determined using information criteria. Analysis suggested the use of 11 lags for optimal modeling.</p>
+      
+      <h3>ARIMA with External Regressor</h3>
+      <p>An ARIMA(0,1,1)(0,0,1)[12] model was fitted with copper prices as an external regressor, combining both seasonal and non-seasonal components in the autoregressive integrated moving average framework.</p>
+    </section>
+    
+    <section id="results">
+      <h2>Results & Model Comparison</h2>
+      <p>Models were evaluated using both information criteria (AIC/BIC) and forecast accuracy metrics (RMSE, MAPE, MAE) on the test set.</p>
+      
+      <table class="model-comparison">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>AIC</th>
+            <th>BIC</th>
+            <th>RMSE</th>
+            <th>MAPE</th>
+            <th>MAE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ARIMA</td>
+            <td>Moderate</td>
+            <td>Moderate</td>
+            <td>Lowest</td>
+            <td>Lowest</td>
+            <td>Lowest</td>
+          </tr>
+          <tr>
+            <td>VAR</td>
+            <td>Lowest</td>
+            <td>Lowest</td>
+            <td>Highest</td>
+            <td>Highest</td>
+            <td>Highest</td>
+          </tr>
+          <tr>
+            <td>ECM</td>
+            <td>Moderate</td>
+            <td>Moderate</td>
+            <td>Moderate</td>
+            <td>Moderate</td>
+            <td>Moderate</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <p>While the VAR model showed superior performance in terms of information criteria (AIC/BIC), the ARIMA model demonstrated the best out-of-sample forecast accuracy with the lowest error metrics.</p>
+    </section>
+    
+    <section id="conclusion">
+      <h2>Conclusion & Key Insights</h2>
+      <p>Despite the VAR model having superior information criteria scores, the ARIMA model with copper as an external regressor demonstrated the best forecasting performance, indicating the importance of considering multiple evaluation metrics in time series modeling.</p>
+      
+      <h3>Key Findings</h3>
+      <ul>
+        <li>Strong evidence of long-term relationships between aluminum and copper prices</li>
+        <li>Differencing successfully achieved stationarity in all metal price series</li>
+        <li>The ARIMA model provided the most accurate predictions despite not having the best information criteria scores</li>
+        <li>The ECM model offered moderate performance with interpretable results about long-term relationships</li>
+        <li>The VAR model, despite having the best AIC/BIC scores, did not translate to superior forecasting ability</li>
+      </ul>
+      
+      <h3>Market Implications</h3>
+      <p>The analysis suggests that copper prices are a valuable predictor of aluminum price movements, which has implications for traders, manufacturers, and other stakeholders in the metals industry. The forecasts predict continued upward trends in aluminum prices, with more stable growth than the volatile patterns observed in historical data.</p>
+    </section>
+    
+    <section>
+      <h2>Technical Implementation</h2>
+      <p>This project was implemented in R using a range of specialized time series packages:</p>
+      <ul>
+        <li><strong>readxl:</strong> For data import</li>
+        <li><strong>vars:</strong> For Vector Autoregression modeling</li>
+        <li><strong>mFilter:</strong> For time series filtering</li>
+        <li><strong>fpp3:</strong> For forecasting procedures</li>
+        <li><strong>broom:</strong> For model diagnostics</li>
+        <li><strong>forecast:</strong> For forecasting functions</li>
+        <li><strong>Metrics:</strong> For forecast accuracy evaluation</li>
+      </ul>
+      
+      <p>The analysis was conducted in a reproducible R markdown document (.qmd) which ensures transparency and reproducibility of all results.</p>
+    </section>
+  </main>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Krushynskyi Dmytro. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#" aria-label="GitHub">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="#" aria-label="University">
+          <i class="fas fa-university"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Font Awesome for social icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</body>
+</html>

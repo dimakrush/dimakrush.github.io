@@ -80,7 +80,6 @@
   <main class="container">
     <a href="index.html#projects" class="back-link">Back to Projects</a>
     <div class="project-header">
-      <div class="project-image">EPUB → PDF</div>
       <div class="project-details">
         <h2>EPUB to PDF Converter</h2>
         <p>A Python script that converts EPUB e-books to PDF format with high fidelity, batch processing, Unicode font support, and progress tracking.</p>
@@ -93,7 +92,6 @@
           <span class="tech-badge">concurrent.futures</span>
           <span class="tech-badge">tqdm</span>
         </div>
-        <a href="https://github.com/dmytrokrushynskyi/epub-to-pdf" class="cta-button">View on GitHub</a>
       </div>
     </div>
     <section>
@@ -141,42 +139,6 @@
             <p>Display conversion progress with a tqdm progress bar.</p>
           </div>
         </div>
-      </div>
-    </section>
-    <section>
-      <h3>Core Script</h3>
-      <div class="code-block">
-        <div class="code-language">Python</div>
-        <pre>
-import os
-import tempfile
-from fpdf import FPDF
-import ebooklib
-from ebooklib import epub
-from bs4 import BeautifulSoup
-from concurrent.futures import ProcessPoolExecutor
-from tqdm import tqdm
-
-class PDF(FPDF):
-    def header(self):
-        self.set_font('Arial', 'B', 12)
-        self.cell(0, 10, '', 0, 1, 'C')
-        
-    def footer(self):
-        self.set_y(-15)
-        self.set_font('Arial', 'I', 8)
-        self.cell(0, 10, f'Page {self.page_no()}', 0, 0, 'C')
-
-# ... full script ...
-
-def epub_to_pdf(epub_file, pdf_file):
-    # read EPUB, load fonts, parse HTML and render PDF
-    pass
-
-# Batch conversion with parallel processing and progress bar
-if __name__ == '__main__':
-    convert_all_epubs_in_folder('/path/to/epubs')
-        </pre>
       </div>
     </section>
     <a href="index.html#projects" class="back-link">Back to Projects</a>

@@ -56,42 +56,6 @@
       <p><strong>How it works:</strong> The scraper sends HTTP requests to each target URL, parses the response content, and extracts specific details from each agency's listing (name, description, location, etc.). The data is then saved in a structured format (CSV or database) for easy analysis.</p>
     </section>
     
-    <section id="scraper-code">
-      <h2>Scraper Code</h2>
-      <p>The following code snippet demonstrates the main functionality of the scraper for SEO agency listings.</p>
-      
-      <pre><code>
-import requests
-from bs4 import BeautifulSoup
-import csv
-
-# URL of the target page
-url = "https://example.com/seo-agencies"
-
-# Send GET request
-response = requests.get(url)
-soup = BeautifulSoup(response.content, "html.parser")
-
-# Find agency listings
-agency_cards = soup.find_all("div", class_="agency-card")
-
-# Prepare CSV file for saving data
-with open("seo_agencies.csv", "w", newline="") as file:
-    writer = csv.writer(file)
-    writer.writerow(["Name", "Description", "Location", "Services"])
-    
-    for card in agency_cards:
-        name = card.find("h3").get_text()
-        description = card.find("p", class_="description").get_text()
-        location = card.find("span", class_="location").get_text()
-        services = card.find("ul", class_="services").get_text()
-        
-        writer.writerow([name, description, location, services])
-
-print("Data saved to seo_agencies.csv")
-      </code></pre>
-    </section>
-    
     <section id="technologies">
       <h2>Technologies Used</h2>
       <div class="tech-stack">
