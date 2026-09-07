@@ -10,6 +10,7 @@ body { color: var(--ink); background: #fff; }
 a { color: var(--ink); text-decoration: underline; text-underline-offset: .2em; }
 a:hover { text-decoration-thickness: 2px; }
 a:focus-visible, button:focus-visible { outline: 3px solid var(--ink); outline-offset: 5px; }
+header a:focus-visible, footer a:focus-visible { outline-color: var(--accent); }
 header { background: var(--ink); color: #fff; border-top: 8px solid var(--accent); }
 header h1 { color: #fff; }
 header p { color: var(--accent); }
@@ -24,6 +25,9 @@ h3, .job-title, .school-name, label, .language-level { color: var(--ink); }
 .header-content h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; }
 .profile p { max-width: 85ch; margin-bottom: 1.25rem; }
 .skill-item { background: var(--surface); border-left-color: var(--accent); }
+.skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.skill-item h4 { margin-bottom: .35rem; font-size: 1rem; }
+.skill-item p { font-size: .9375rem; }
 .featured-experience { background: var(--surface); border-left: 5px solid var(--accent); padding: 1.5rem; }
 .tools-used { font-size: .9375rem; margin-top: 1rem; color: var(--muted); }
 .company-date, .degree-date { gap: .5rem 1.5rem; }
@@ -34,9 +38,15 @@ h3, .job-title, .school-name, label, .language-level { color: var(--ink); }
 .project-info > p { margin-bottom: 1rem; }
 .project-info > a { margin-top: auto; font-weight: 600; }
 .project-meta { color: var(--muted); font-size: .875rem; line-height: 1.5; }
+.more-projects { margin-top: 2rem; }
+.more-projects-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; }
+.more-projects-list li { padding: .875rem 0; border-bottom: 1px solid #deded8; }
+.more-projects-list a, .more-project-name { font-weight: 600; }
+.more-projects-list p { color: var(--muted); font-size: .9375rem; margin-top: .25rem; }
 .language-badge { font-size: .875rem; background: #ededeb; }
 .education-item ul { padding-left: 1.5rem; }
 .education-item li { margin-bottom: .5rem; }
+.education-item p + p { margin-top: .5rem; }
 .step { background: var(--surface); }
 .cta-button, button { background: var(--accent); color: var(--ink); }
 .cta-button:hover, button:hover { background: #ddd000; color: var(--ink); }
@@ -47,6 +57,7 @@ footer a, .social-links a { color: #fff; }
 .case-section p { margin-bottom: 1rem; }
 .case-section ul { padding-left: 1.5rem; }
 .case-section li { margin-bottom: .6rem; }
+.pipeline-steps { padding-left: 1.5rem; margin-bottom: 1rem; }
 @media (max-width: 768px) {
   .container { padding: 1.5rem; }
   nav ul { flex-direction: row; }
@@ -56,6 +67,9 @@ footer a, .social-links a { color: #fff; }
   header { padding: 1.5rem 0; }
   .contact-info { overflow-wrap: anywhere; }
   section { scroll-margin-top: 2rem; }
+}
+@media (max-width: 540px) {
+  .skills-grid, .more-projects-list { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -73,4 +87,7 @@ footer a, .social-links a { color: #fff; }
   .featured-experience { background: white; padding: .75rem; }
   h2, h3 { break-after: avoid; }
   .project-card:hover { transform: none; }
+  .projects-grid, .more-projects-list { display: block; }
+  .project-card { margin-bottom: .75rem; }
+  .more-projects-list li { break-inside: avoid; }
 }
